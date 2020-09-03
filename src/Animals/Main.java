@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 public class Main {
 
     public static final String SPACE = " ";
@@ -15,7 +14,7 @@ public class Main {
 
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
 
-        ATM atm = new ATM(100,100,100);
+        ATM atm = new ATM(100, 100, 100);
 
         do {
             atm.checkBills();
@@ -28,22 +27,14 @@ public class Main {
             atm.cashWithdrawal(Integer.parseInt(bf.readLine()), atm.getSelectBill());
             System.out.println("Do you want to continue? : enter Y or N");
             String s = bf.readLine();
-            if (s.toLowerCase().equals("y")){
+            if (s.toLowerCase().equals("y")) {
                 continue;
-            }else if(s.toLowerCase().equals("n")){
+            } else if (s.toLowerCase().equals("n")) {
                 System.out.println("Good buy!");
                 break;
             }
-        }while (true);
+        } while (true);
         bf.close();
-//        System.out.println("Hello World");
-//
-//        Dog dog = new Dog();
-//        Cat cat = new Cat();
-//        cat.setAge(3);
-//        cat.setName("Vaska");
-//        dog.setName("Barsik");
 
     }
-
 }
