@@ -84,8 +84,7 @@ public class ATM {
             setQuantityBills(quantityBillsOf20 - count, quantityBillsOf50, quantityBillsOf100);
 
         }else {
-
-            System.out.println("This operation is failed!".toUpperCase());
+            
             System.out.println("This operation is failed!".toUpperCase());
 
         }
