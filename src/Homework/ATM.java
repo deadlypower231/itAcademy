@@ -85,6 +85,8 @@ public class ATM {
 
         }else {
             System.out.println("This operation is failed!".toUpperCase());
+            System.out.println("This operation is failed!".toUpperCase());
+            
         }
 
 
