@@ -36,11 +36,6 @@ public class Main {
             }
         }while (true);
         bf.close();
-
-
-
-
-
 //        System.out.println("Hello World");
 //
 //        Dog dog = new Dog();
