@@ -1,23 +1,13 @@
 package Animals;
 
-public class Cat {
-
-    public String name;
-    public int Age;
-
-    public String getName() {
-        return name;
+public class Cat extends Animal  {
+    @Override
+    public void saySmth() {
+        System.out.println("Meow");
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return Age;
-    }
-
-    public void setAge(int age) {
-        Age = age;
+    @Override
+    public void play() {
+        System.out.println("Play");
     }
 }
