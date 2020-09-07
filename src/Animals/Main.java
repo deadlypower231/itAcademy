@@ -1,40 +1,36 @@
 package Animals;
 
-import Homework.ATM;
 
+import Utility.Fighting;
+
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
 
-    public static final String SPACE = " ";
+
+    public static final String X = "//////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\n" +
+            "\t\tWelcome to Animal Fighting!\n" +
+            "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//////////////////////\n";
 
     public static void main(String[] args) throws IOException {
+        Cat heroCat = new Cat();
+        Cat computer = new Cat("Computer");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println(X);
+        System.out.print("Enter the name: ");
+        heroCat.setName(reader.readLine());
+        heroCat.health();
+        heroCat.showCat();
+        computer.health();
 
-        ATM atm = new ATM(100, 100, 100);
+        Fighting fight = new Fighting();
+        fight.roll(heroCat,computer);
 
-        do {
-            atm.checkBills();
-            System.out.print("Select a bill: ");
-            while (atm.checkSelect(Integer.parseInt(bf.readLine())) == 0) {
-                System.out.println("False");
-                System.out.print("Select a bill: ");
-            }
-            System.out.print("Enter the amount of money to withdraw: ");
-            atm.cashWithdrawal(Integer.parseInt(bf.readLine()), atm.getSelectBill());
-            System.out.println("Do you want to continue? : enter Y or N");
-            String s = bf.readLine();
-            if (s.toLowerCase().equals("y")) {
-                continue;
-            } else if (s.toLowerCase().equals("n")) {
-                System.out.println("Good buy!");
-                break;
-            }
-        } while (true);
-        bf.close();
+
 
     }
 }
