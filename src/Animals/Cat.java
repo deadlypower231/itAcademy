@@ -1,25 +1,126 @@
 package Animals;
 
 import Utility.Characteristics;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class Cat implements Characteristics {
+public class Cat extends Animal implements Characteristics{
 
-        private String name;
-        private int health = 100;
-        private int str = 3;
-        private int dex = 3;
-        private int con = 3;
-        private int def = 1;
-        private int damage = 10;
+
 
     @Override
-    public void health() {
-        this.health = this.health + (int)(this.con * 1.15);
+    public void createComputer() {
+
+       this.name = "Computer1";
+       this.str = 4;
+       this.dex = 4;
+       this.con = 4;
+       this.health = health();
+
+    }
+
+    @Override
+    public void createHero() throws IOException {
+
+        int count = 3;
+        int str = 0;
+        int dex = 0;
+        int con = 0;
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.print("Enter the name: ");
+        String name = reader.readLine();
+        System.out.println("You have 3 points, distribute them between STR, DEX, CON");
+
+        while (count != 0) {
+            while (true) {
+                System.out.print(count + " points left.\nSTR: ");
+                int strRead = Integer.parseInt(reader.readLine());
+                if (strRead == 3) {
+                    str = strRead;
+                    count -= strRead;
+                    break;
+                } else if (strRead == 2) {
+                    str = strRead;
+                    count -= strRead;
+                    break;
+                } else if (strRead == 1) {
+                    str = strRead;
+                    count -= strRead;
+                    break;
+                } else if (strRead == 0) {
+                    str = strRead;
+                    count -= strRead;
+                    break;
+                } else {
+                    System.out.println("Enter from 0 to " + count + "!");
+                }
+            }
+
+            while (true) {
+                System.out.print(count + " points left.\nDEX: ");
+                int dexRead = Integer.parseInt(reader.readLine());
+                if (dexRead == 3 && dexRead <= count) {
+                    dex = dexRead;
+                    count -= dexRead;
+                    break;
+                } else if (dexRead == 2 && dexRead <= count) {
+                    dex = dexRead;
+                    count -= dexRead;
+                    break;
+                } else if (dexRead == 1 && dexRead <= count) {
+                    dex = dexRead;
+                    count -= dexRead;
+                    break;
+                } else if (dexRead == 0 && dexRead <= count) {
+                    dex = dexRead;
+                    count -= dexRead;
+                    break;
+                } else {
+                    System.out.println("Enter from 0 to " + count + "!");
+                }
+            }
+
+            while (true) {
+                System.out.print(count + " points left.\nDEX: ");
+                int conRead = Integer.parseInt(reader.readLine());
+                if (conRead == 3 && conRead <= count) {
+                    con = conRead;
+                    count -= conRead;
+                    break;
+                } else if (conRead == 2 && conRead <= count) {
+                    con = conRead;
+                    count -= conRead;
+                    break;
+                } else if (conRead == 1 && conRead <= count) {
+                    con = conRead;
+                    count -= conRead;
+                    break;
+                } else if (conRead == 0 && conRead <= count) {
+                    con = conRead;
+                    count -= conRead;
+                    break;
+                } else {
+                    System.out.println("Enter from 0 to " + count + "!");
+                }
+            }
+        }
+
+        reader.close();
+
+        this.name = name;
+        this.str = this.str +str;
+        this.dex = this.dex + dex;
+        this.con = this.con + con;
+        this.health = health();
+
     }
 
     @Override
     public int damage(){
-        return this.damage+(int)(this.str*0.35);
+        return this.damage+(int)(this.str * 0.35);
     }
 
     @Override
@@ -37,73 +138,8 @@ public class Cat implements Characteristics {
         return (int) (this.dex * 1.25 + 5);
     }
 
-    public Cat(){
-
-        }
-
-        public Cat(String name){
-            this.name = name;
-        }
-
-        public int getDef() {
-            return def;
-        }
-
-        public void setDef(int def) {
-            this.def = def;
-        }
-
-        public int getDamage() {
-            return damage;
-        }
-
-        public void setDamage(int damage) {
-            this.damage = damage;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getHealth() {
-            return health;
-        }
-
-        public void setHealth(int health) {
-            this.health = health;
-        }
-
-        public int getStr() {
-            return str;
-        }
-
-        public void setStr(int str) {
-            this.str = str;
-        }
-
-        public int getDex() {
-            return dex;
-        }
-
-        public void setDex(int dex) {
-            this.dex = dex;
-        }
-
-        public int getCon() {
-            return con;
-        }
-
-        public void setCon(int con) {
-            this.con = con;
-        }
-
-        public void showCat(){
-            System.out.println(this.name + "`s characteristics: "+ "\nHealth: " + this.health +
-                    "\nStr: " + this.str + "\nDex: " + this.dex + "\nCon: " + this.con);
-        }
+    @Override
+    public int health() {
+        return (int) (this.health + (this.con * 3.15));
     }
+}

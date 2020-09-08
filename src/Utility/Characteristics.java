@@ -2,7 +2,7 @@ package Utility;
 
 public interface Characteristics {
 
-    void health();
+    int health();
     int damage();
     int defence();
     int evasionChance();
