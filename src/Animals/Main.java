@@ -30,7 +30,7 @@ public class Main {
         Fighting fight = new Fighting();
         fight.roll(heroCat,computer);
 
-
+        reader.close();
 
     }
 }

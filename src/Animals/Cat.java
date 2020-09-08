@@ -8,7 +8,7 @@ public class Cat implements Characteristics {
         private int health = 100;
         private int str = 3;
         private int dex = 3;
-        private int con = 4;
+        private int con = 3;
         private int def = 1;
         private int damage = 10;
 
@@ -28,8 +28,13 @@ public class Cat implements Characteristics {
     }
 
     @Override
-    public int evasion() {
-        return (int) (this.dex * 0.75);
+    public int evasionChance() {
+        return (int) (this.dex * 0.75 + 5);
+    }
+
+    @Override
+    public int criticalChance() {
+        return (int) (this.dex * 1.25 + 5);
     }
 
     public Cat(){

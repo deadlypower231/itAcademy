@@ -5,14 +5,12 @@ import Animals.Cat;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Random;
-import java.util.stream.IntStream;
+
 
 
 public class Fighting {
 
     public static final String ROLLS_1_10 = " rolls (1-10): ";
-    int attack;
 
     public void roll(Cat cat1, Cat cat2) throws IOException {
         double firstCatRoll = 1;
@@ -38,31 +36,42 @@ public class Fighting {
         int round = 1;
 
         while (!(cat1.getHealth() <= 0) || !(cat2.getHealth() <= 0)) {
-
-
+            
             System.out.println("\nRound " + round + "!\n");
-            if (r % 2 != 0) {
+            if ((r + 10) % 2 != 0) {
 
                 System.out.println(cat1.getName() + " attack!");//comp
-                int damage1 = cat1.damage();
-                int defence = cat2.defence();
-                float damageDefence = (float) damage1 / 100 * defence;
-                float damage = damage1 - damageDefence;
-                cat2.setHealth(cat2.getHealth() - Math.round(damage));
-                System.out.println(cat1.getName() + " deal " + (int)damage + " damage to " + cat2.getName());
-                cat2.showCat();
+
+                float damage = cat1.damage() - (float) cat1.damage() / 100 * cat2.defence();
+                if (evasion(cat2)){
+                    System.out.println(cat2.getName() + " dodged the " + cat1.getName() + "`s attack!");
+                }else {
+                    if (critical(cat1)){
+                        cat2.setHealth(cat2.getHealth() - Math.round(damage * 2));
+                        System.out.println(cat1.getName() + " deal critical " + Math.round(damage * 2) + " damage to " + cat2.getName());
+                    }else {
+                        cat2.setHealth(cat2.getHealth() - Math.round(damage));
+                        System.out.println(cat1.getName() + " deal " + Math.round(damage) + " damage to " + cat2.getName());
+                    }
+                }
                 round++;
                 r++;
 
-            } else if (r % 2 == 0){
+            } else if ((r + 10) % 2 == 0){
                 System.out.println(cat2.getName() + " attack!");//user
-                int damage1 = cat2.damage();
-                int defence = cat1.defence();
-                float damageDefence = (float) damage1 / 100 * defence;
-                float damage = damage1 - damageDefence;
-                cat1.setHealth(cat1.getHealth() - Math.round(damage));
-                System.out.println(cat2.getName() + " deal " + (int)damage + " damage to " + cat1.getName());
-                cat1.showCat();
+
+                float damage = cat2.damage() - (float) cat2.damage() / 100 * cat1.defence();
+                if (evasion(cat1)) {
+                    System.out.println(cat1.getName() + " dodged the " + cat2.getName() + "`s attack!");
+                }else {
+                    if (critical(cat2)) {
+                        cat1.setHealth(cat1.getHealth() - Math.round(damage * 2));
+                        System.out.println(cat2.getName() + " deal critical  " + Math.round(damage * 2) + " damage to " + cat1.getName());
+                    } else {
+                        cat1.setHealth(cat1.getHealth() - Math.round(damage));
+                    System.out.println(cat2.getName() + " deal " + Math.round(damage) + " damage to " + cat1.getName());
+                    }
+                }
                 round++;
                 r++;
 
@@ -74,12 +83,28 @@ public class Fighting {
             else if (cat2.getHealth() <= 0){
                 System.out.println(cat1.getName() + " wins " + cat2.getName());
                 break;
+            }else {
+                System.out.println(cat1.getName() + ": " + cat1.getHealth() + "hp.\n" + cat2.getName() + ": " + cat2.getHealth() + "hp.");
             }
             System.out.println("Press any button: ");
             String s = reader.readLine();
 
         }
 
+        reader.close();
+
+    }
+    public boolean evasion(Cat cat){
+
+        int random = (int) (Math.random()*100 + 1);
+        return (random <= cat.evasionChance()) ? true : false;
+
+    }
+
+    public boolean critical(Cat cat){
+
+        int random = (int) (Math.random()*100 + 1);
+        return (random <= cat.criticalChance()) ? true : false;
     }
 }
 
