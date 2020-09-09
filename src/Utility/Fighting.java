@@ -11,6 +11,7 @@ public class Fighting extends Animal implements Characteristics {
 
     public void roll(Animal animal1, Animal animal2) throws IOException {
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         double firstCatRoll = 1;
         double secondCatRoll = 1;
 
@@ -28,12 +29,16 @@ public class Fighting extends Animal implements Characteristics {
 
         if (firstCatRoll > secondCatRoll) {
 
-            System.out.println("\n" + animal1.getName() + " attack first!");
+            System.out.println("\n" + animal1.getName() + " attack first!\n\n");
+            System.out.println("Are you ready?\n");
+            String s = reader.readLine();
             fight(animal1, animal2);
 
         } else {
 
-            System.out.println("\n" + animal2.getName() + " attack first!");
+            System.out.println("\n" + animal2.getName() + " attack first!\n\n");
+            System.out.println("Are you ready?\n");
+            String s = reader.readLine();
             fight(animal2, animal1);
 
         }
@@ -51,9 +56,12 @@ public class Fighting extends Animal implements Characteristics {
             System.out.println("\nRound " + round + "!\n");
             if (r  % 2 != 0) {
 
+                int random = (int) (Math.random()*3);
+
                 System.out.println(animal1.getName() + " attack!");
 
-                float damage = animal1.damage() - (float) animal1.damage() / 100 * animal2.defence();
+                float damage = ((animal1.damage() - 1) + random)- (float) animal1.damage()/ 100 * animal2.defence();
+
 
                 if (evasion(animal2)){
 
@@ -63,15 +71,15 @@ public class Fighting extends Animal implements Characteristics {
 
                     if (critical(animal1)){
 
-                        animal2.setHealth((int) (animal2.getHealth() - Math.round(damage * animal1.getCriticalStrike())));
+                        animal2.setHealth((animal2.getHealth() - (int)(damage * animal1.getCriticalStrike())));
 
                         System.out.println("Critical strike!\n" + animal1.getName() + " deal critical "
-                                + Math.round(damage * animal1.getCriticalStrike()) + " damage to " + animal2.getName());
+                                + (int)(damage * animal1.getCriticalStrike()) + " damage to " + animal2.getName());
 
                     }else {
 
-                        animal2.setHealth(animal2.getHealth() - Math.round(damage));
-                        System.out.println(animal1.getName() + " deal " + Math.round(damage) + " damage to " + animal2.getName());
+                        animal2.setHealth(animal2.getHealth() - (int)(damage));
+                        System.out.println(animal1.getName() + " deal " + (int)(damage) + " damage to " + animal2.getName());
 
                     }
                 }
@@ -81,9 +89,10 @@ public class Fighting extends Animal implements Characteristics {
 
             } else if (r % 2 == 0){
 
+                int random = (int) (Math.random()*3);
                 System.out.println(animal2.getName() + " attack!");
 
-                float damage = animal2.damage() - (float) animal2.damage() / 100 * animal1.defence();
+                float damage = ((animal2.damage() - 1) + random) - (float) animal2.damage() / 100 * animal1.defence();
 
                 if (evasion(animal1)) {
 
@@ -93,15 +102,15 @@ public class Fighting extends Animal implements Characteristics {
 
                     if (critical(animal2)) {
 
-                        animal1.setHealth((int) (animal1.getHealth() - Math.round(damage * animal2.getCriticalStrike())));
+                        animal1.setHealth((animal1.getHealth() - (int)(damage * animal2.getCriticalStrike())));
 
                         System.out.println(animal2.getName() + " deal critical  "
-                                + Math.round(damage * animal2.getCriticalStrike()) + " damage to " + animal1.getName());
+                                + (int)(damage * animal2.getCriticalStrike()) + " damage to " + animal1.getName());
 
                     } else {
 
-                        animal1.setHealth(animal1.getHealth() - Math.round(damage));
-                        System.out.println(animal2.getName() + " deal " + Math.round(damage) + " damage to " + animal1.getName());
+                        animal1.setHealth(animal1.getHealth() - (int)(damage));
+                        System.out.println(animal2.getName() + " deal " + (int)(damage) + " damage to " + animal1.getName());
 
                     }
                 }

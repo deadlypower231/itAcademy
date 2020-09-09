@@ -141,7 +141,7 @@ public class Dog extends Animal implements Characteristics{
         this.str = 6 + 1;
         this.dex = 2 + 1;
         this.con = 5 + 1;
-        this.def = 4 + 1;
+        this.def = 4;
         this.damage = 15;
         this.criticalStrike = 2.25;
         this.health = 150;

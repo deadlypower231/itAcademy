@@ -108,7 +108,7 @@ public class Cat extends Animal implements Characteristics{
             }
         }
 
-        reader.close();
+
 
         this.name = name;
         this.str = this.str +str;
