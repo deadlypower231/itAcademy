@@ -9,14 +9,28 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        /*Создаем объекты.*/
+
         Animal user = null;
         Animal computer = null;
-
         Service service = new Service();
-        service.chooseRace(service.getIntReader());
+
+        /*Выбираем вид героя, которым будем играть.
+         * и создаем героя.*/
+
+        user = service.chooseRace();
         service.createHero(user);
 
-        System.out.println(user.getName());
+        /*Создаем компьютера от выбранного вида пользователя*/
+
+        computer = service.createComputerHero(user);
+
+        /*Выводим на экран характеристики пользователя и компьютера*/
+
+        service.showAnimalStats(user);
+        service.showAnimalStats(computer);
+
+        
 
     }
 

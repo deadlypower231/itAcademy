@@ -7,5 +7,10 @@ import java.io.IOException;
 public interface ICreateHero {
 
     void createHero(Animal animal) throws IOException;
-    void createComputerHero();
+
+    Animal createComputerHero( Animal user);
+
+    void createHeroCat(Animal animal);
+
+    void createHeroDog(Animal animal);
 }

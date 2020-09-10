@@ -12,49 +12,225 @@ import java.io.InputStreamReader;
 
 public class Service implements IService, ICreateHero {
 
-    public Animal chooseRace(int i) {
-        return (i == 1) ? new Cat() : new Dog();
+    /*Метод chooseRace создает на выбор Кота или Собаку.*/
+    public Animal chooseRace() throws IOException {
+        while (true) {
+            System.out.println("Выберите 1 или 2");//test
+            int i = getIntReader();
+            if (i > 0 && i < 3) {
+                return (i == 1) ? new Cat() : new Dog();
+            }
+        }
+
     }
 
+    /*Метод getIntReader читает из консоли вводимое значение и проверяет - является ли это значение числом.
+     * Возвращает целочисленное число.*/
     @Override
     public int getIntReader() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int i = Integer.parseInt(reader.readLine());
-        reader.close();
-        return i;
+        while (true) {
+            try {
+                Integer i = Integer.valueOf(reader.readLine());
+                if (i instanceof Number) {
+                    return i;
+                }
+            } catch (Exception e) {
+                System.out.println("Введите число:");
+            }
+        }
+
     }
 
+    /*Метод getStringReader читает из консоли строку.
+     * Возвращает строковое значение.*/
     @Override
     public String getStringReader() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String s = reader.readLine();
-        reader.close();
         return s;
     }
 
+    /*Метод createHero создает пользовательскую сущность.
+     * Задает стандартные характеристики сущности.
+     * Запрашивает из консоли имя создоваемой сущности.
+     * Так же обновляет урон, защиту, здоровье, ману - в зависимости от характеристик.*/
     @Override
     public void createHero(Animal animal) throws IOException {
+        System.out.print("Enter your name: ");
         animal.setName(getStringReader());
+        animal.setLevel(1);
+        if (animal instanceof Cat) {
+            createHeroCat(animal);
+            animal.setDamage(setDamageWithStrengthCat(animal));
+            animal.setDefence(setDefenceWithAgilityCat(animal));
+            animal.setHealth(setHealthWithStrengthCat(animal));
+            animal.setMana(setManaWithIntelligenceCat(animal));
+        } else if (animal instanceof Dog) {
+            createHeroDog(animal);
+            animal.setDamage(setDamageWithStrengthDog(animal));
+            animal.setDefence(setDefenceWithAgilityDog(animal));
+            animal.setHealth(setHealthWithStrengthDog(animal));
+            animal.setMana(setManaWithIntelligenceDog(animal));
+        }
+
     }
 
+    /*Метод createComputerHero проверяет входное значение пользователя, и сверяет на схожесть.
+     * Cоздает компьютера с схожим классом и присваевает имя через метод getRandomName (Computer... + рандомное число).
+     * Задает стандартные характеристики сущности.
+     * Так же обновляет урон, защиту, здоровье, ману - в зависимости от характеристик.
+     * Возвращает сущность.*/
     @Override
-    public void createComputerHero() {
+    public Animal createComputerHero(Animal user) {
+        if (user instanceof Cat) {
+            Cat computer = new Cat();
+            computer.setName(getRandomName("ComputerCat"));
+            computer.setLevel(user.getLevel());
+            createHeroCat(computer);
+            computer.setDamage(setDamageWithStrengthCat(computer));
+            computer.setDefence(setDefenceWithAgilityCat(computer));
+            computer.setHealth(setHealthWithStrengthCat(computer));
+            computer.setMana(setManaWithIntelligenceCat(computer));
+            return computer;
+
+        } else {
+            Dog computer = new Dog();
+            computer.setName(getRandomName("ComputerDog"));
+            computer.setLevel(user.getLevel());
+            createHeroDog(computer);
+            computer.setDamage(setDamageWithStrengthDog(computer));
+            computer.setDefence(setDefenceWithAgilityDog(computer));
+            computer.setHealth(setHealthWithStrengthDog(computer));
+            computer.setMana(setManaWithIntelligenceDog(computer));
+            return computer;
+        }
 
     }
 
+    /*Метод createHeroCat задает сущности Cat стандартные характеристики.*/
     @Override
-    public int getCriticalChance(Animal animal) {
+    public void createHeroCat(Animal animal) {
 
-        return 0;
+        animal.setHealth(100);
+        animal.setMana(25);
+        animal.setDamage(10);
+        animal.setDefence(2);
+        animal.setStrength(3);
+        animal.setAgility(5);
+        animal.setIntelligence(2);
+        animal.setCriticalChance(5);
+        animal.setCriticalStrikeMultiplier(2);
+        animal.setEvasion(7);
     }
 
+    /*Метод createHeroDog задает сущности Dog стандартные характеристики.*/
     @Override
-    public int getEvasion(Animal animal) {
-        return 0;
+    public void createHeroDog(Animal animal) {
+
+        animal.setHealth(100);
+        animal.setMana(25);
+        animal.setDamage(10);
+        animal.setDefence(2);
+        animal.setStrength(5);
+        animal.setAgility(3);
+        animal.setIntelligence(2);
+        animal.setCriticalChance(6);
+        animal.setCriticalStrikeMultiplier(2.25);
+        animal.setEvasion(3);
     }
 
+    /*Метод setDamageWithStrengthCat изменяет стандартные значения Cat на значения с учетом силы.
+     * Возвращает double.*/
     @Override
-    public int getDefence(Animal animal) {
-        return 0;
+    public double setDamageWithStrengthCat(Animal animal) {
+        return animal.getDamage() + (animal.getStrength() * 0.95);
     }
+
+    /*Метод setDamageWithStrengthDog изменяет стандартные значения Dog на значения с учетом силы.
+     * Возвращает double.*/
+    @Override
+    public double setDamageWithStrengthDog(Animal animal) {
+        return animal.getDamage() + (animal.getStrength() * 1.05);
+    }
+
+    /*Метод setDefenceWithAgilityCat изменяет стандартные значения Cat на значения с учетом ловкости.
+     * Возвращает double.*/
+    @Override
+    public double setDefenceWithAgilityCat(Animal animal) {
+        return animal.getDefence() + (animal.getAgility() * 1.35);
+    }
+
+    /*Метод setDefenceWithAgilityDog изменяет стандартные значения Dog на значения с учетом ловкости.
+     * Возвращает double.*/
+    @Override
+    public double setDefenceWithAgilityDog(Animal animal) {
+        return animal.getDefence() + (animal.getAgility() * 1.75);
+    }
+
+    /*Метод setHealthWithStrengthCat изменяет стандартные значения Cat на значения с учетом силы.
+     * Возвращает double.*/
+    @Override
+    public double setHealthWithStrengthCat(Animal animal) {
+        return animal.getHealth() + (animal.getStrength() * 2.05);
+    }
+
+    /*Метод setHealthWithStrengthDog изменяет стандартные значения Dog на значения с учетом силы.
+     * Возвращает double.*/
+    @Override
+    public double setHealthWithStrengthDog(Animal animal) {
+        return animal.getHealth() + (animal.getStrength() * 3.05);
+    }
+
+    /*Метод setManaWithIntelligenceCat изменяет стандартные значения Cat на значения с учетом интеллекта.
+     * Возвращает double.*/
+    @Override
+    public double setManaWithIntelligenceCat(Animal animal) {
+        return animal.getMana() + (animal.getIntelligence() * 1.55);
+    }
+
+    /*Метод setManaWithIntelligenceDog изменяет стандартные значения Dog на значения с учетом интеллекта.
+     * Возвращает double.*/
+    @Override
+    public double setManaWithIntelligenceDog(Animal animal) {
+        return animal.getMana() + (animal.getIntelligence() * 1.55);
+    }
+
+    /*Метод showAnimalStats выводит в консоль характеристики сущности.*/
+    @Override
+    public void showAnimalStats(Animal animal) {
+        System.out.println("~~~~~~~~~~" + animal.getName() + "~~~~~~~~~~\n" + "\nHealth: " + (int) animal.getHealth() +
+                "\nMana: " + (int) animal.getMana() + "\nDamage: " + (int) animal.getDamage() +
+                "\nDefence: " + (int) animal.getDefence() + "\nStrength: " + (int) animal.getStrength() +
+                "\nAgility: " + (int) animal.getAgility() + "\nIntelligence: " + (int) animal.getIntelligence() +
+                "\nLevel: " + (int) animal.getLevel() + "\n");
+    }
+
+    /*Метод getRandomName склеивает входную строку с рандомным числом от 0 до 99
+     * Возвращает строку.*/
+    @Override
+    public String getRandomName(String string) {
+        return string + (int) (Math.random() * 100);
+    }
+
+    /*Метод getCriticalChance возвращает шанс критической атаки в зависимости от ловкости входной сущности.
+     * Возвращает double.*/
+    @Override
+    public double getCriticalChance(Animal animal) {
+        return animal.getCriticalChance() + (animal.getAgility() * 0.7);
+    }
+
+    /*Метод getEvasion возвращает шанс уклонения от атаки в зависимости от ловкости входной сущности.
+     * Возвращает double.*/
+    @Override
+    public double getEvasion(Animal animal) {
+        return animal.getEvasion() + (animal.getAgility() * 0.9);
+    }
+
+//    /*Метод getDefence возвращает физическую от атаки в зависимости от ловкости входной сущности.
+//     * Возвращает double.*/
+//    @Override
+//    public double getDefence(Animal animal) {
+//        return animal.getDefence() + (animal.getAgility() * 1.75);
+//    }
 }

@@ -1,24 +1,30 @@
 package Game.Animals;
 
-public class Animal {
+public abstract class Animal {
 
     protected String name;
 
-    protected int level;
+    protected double level;
 
-    protected int health;
+    protected double health;
 
-    protected int mana;
+    protected double mana;
 
-    protected int damage;
+    protected double damage;
 
-    protected int defence;
+    protected double defence;
 
-    protected int strength;
+    protected double strength;
 
-    protected int agility;
+    protected double agility;
 
-    protected int intelligence;
+    protected double intelligence;
+
+    protected double criticalStrikeMultiplier;
+
+    protected double criticalChance;
+
+    protected double evasion;
 
     public String getName() {
         return name;
@@ -28,67 +34,91 @@ public class Animal {
         this.name = name;
     }
 
-    public int getLevel() {
+    public double getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(double level) {
         this.level = level;
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getMana() {
+    public double getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    public void setMana(double mana) {
         this.mana = mana;
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
-    public int getDefence() {
+    public double getDefence() {
         return defence;
     }
 
-    public void setDefence(int defence) {
+    public void setDefence(double defence) {
         this.defence = defence;
     }
 
-    public int getStrength() {
+    public double getStrength() {
         return strength;
     }
 
-    public void setStrength(int strength) {
+    public void setStrength(double strength) {
         this.strength = strength;
     }
 
-    public int getAgility() {
+    public double getAgility() {
         return agility;
     }
 
-    public void setAgility(int agility) {
+    public void setAgility(double agility) {
         this.agility = agility;
     }
 
-    public int getIntelligence() {
+    public double getIntelligence() {
         return intelligence;
     }
 
-    public void setIntelligence(int intelligence) {
+    public void setIntelligence(double intelligence) {
         this.intelligence = intelligence;
+    }
+
+    public double getCriticalStrikeMultiplier() {
+        return criticalStrikeMultiplier;
+    }
+
+    public void setCriticalStrikeMultiplier(double criticalStrikeMultiplier) {
+        this.criticalStrikeMultiplier = criticalStrikeMultiplier;
+    }
+
+    public double getCriticalChance() {
+        return criticalChance;
+    }
+
+    public void setCriticalChance(double criticalChance) {
+        this.criticalChance = criticalChance;
+    }
+
+    public double getEvasion() {
+        return evasion;
+    }
+
+    public void setEvasion(double evasion) {
+        this.evasion = evasion;
     }
 }
