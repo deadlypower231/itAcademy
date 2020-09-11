@@ -12,6 +12,77 @@ import java.io.InputStreamReader;
 
 public class Service implements IService, ICreateHero {
 
+    /*Метод flipACoin пользователь и компьютер подбрасывает монету, кто побеждает - тот атакует первым!
+     * Выводит в консоль рандомные значения.
+     * В зависимости от победителя, в метод battle передаются соответствующие аргументы.*/
+    public void flipACoin(Animal user, Animal computer) throws IOException {
+        int userThrows = 0;
+        int computerThrows = 0;
+        while (userThrows == computerThrows) {
+            userThrows = (int) (Math.random() * 100 + 1);
+            computerThrows = (int) (Math.random() * 100 + 1);
+        }
+        if (userThrows > computerThrows) {
+            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
+                    computerThrows + "\n" + user.getName() + " attacks first!\n");
+            battle(user, computer);
+        } else {
+
+            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
+                    computerThrows + "\n" + computer.getName() + " attacks first!\n");
+            battle(computer, user);
+        }
+    }
+
+    /*Метод battle */
+    public void battle(Animal animal1, Animal animal2) throws IOException {
+        int counterRound = 1;
+        while (true) {
+            if (counterRound % 2 != 0) {
+                System.out.println("Round " + counterRound + "!\n");
+                int hp = hit(animal1, animal2);
+                counterRound++;
+                if (hp <= 0) {
+                    System.out.println("Congratulation " + animal1.getName() + " won!");
+                    break;
+                } else {
+                    System.out.println(animal1.getName() + " health: " + (int) animal1.getHealth() + "\n" +
+                            animal2.getName() + " health: " + (int) animal2.getHealth());
+                }
+            } else {
+                System.out.println("Round " + counterRound + "!\n");
+                int hp = hit(animal2, animal1);
+                counterRound++;
+                if (hp <= 0) {
+                    System.out.println(animal2.getName() + " won!");
+                    break;
+                } else {
+                    System.out.println(animal1.getName() + " health: " + (int) animal1.getHealth() + "\n" +
+                            animal2.getName() + " health: " + (int) animal2.getHealth());
+                }
+            }
+            System.out.println("Press any button!");
+            String s = getStringReader();
+        }
+    }
+
+    @Override
+    public int hit(Animal animal1, Animal animal2) {
+        if (getEvasion(animal2)) {
+            System.out.println(animal2.getName() + " dodges!");
+        } else if (getCriticalChance(animal1)) {
+            double criticalDamage = animal1.getDamage() * animal1.getCriticalStrikeMultiplier();
+            double criticalDamageWithDefence = criticalDamage - criticalDamage / 100 * getDefencePercent(animal2);
+            System.out.println(animal1.getName() + " deal " + (int) criticalDamageWithDefence + " critical damage!");
+            animal2.setHealth(animal2.getHealth() - (int) criticalDamageWithDefence);
+        } else {
+            double damage = animal1.getDamage() - animal1.getDamage() / 100 * getDefencePercent(animal2);
+            System.out.println(animal1.getName() + " deal " + (int) damage + " damage!");
+            animal2.setHealth(animal2.getHealth() - (int) damage);
+        }
+        return (int) animal2.getHealth();
+    }
+
     /*Метод chooseRace создает на выбор Кота или Собаку.*/
     public Animal chooseRace() throws IOException {
         while (true) {
@@ -31,7 +102,7 @@ public class Service implements IService, ICreateHero {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
-                Integer i = Integer.valueOf(reader.readLine());
+                Integer i = Integer.parseInt(reader.readLine());
                 if (i instanceof Number) {
                     return i;
                 }
@@ -119,9 +190,9 @@ public class Service implements IService, ICreateHero {
         animal.setStrength(3);
         animal.setAgility(5);
         animal.setIntelligence(2);
-        animal.setCriticalChance(5);
+        animal.setCriticalChance(3);
         animal.setCriticalStrikeMultiplier(2);
-        animal.setEvasion(7);
+        animal.setEvasion(3);
     }
 
     /*Метод createHeroDog задает сущности Dog стандартные характеристики.*/
@@ -135,8 +206,8 @@ public class Service implements IService, ICreateHero {
         animal.setStrength(5);
         animal.setAgility(3);
         animal.setIntelligence(2);
-        animal.setCriticalChance(6);
-        animal.setCriticalStrikeMultiplier(2.25);
+        animal.setCriticalChance(3);
+        animal.setCriticalStrikeMultiplier(2);
         animal.setEvasion(3);
     }
 
@@ -214,23 +285,25 @@ public class Service implements IService, ICreateHero {
     }
 
     /*Метод getCriticalChance возвращает шанс критической атаки в зависимости от ловкости входной сущности.
-     * Возвращает double.*/
+     * Возвращает boolean.*/
     @Override
-    public double getCriticalChance(Animal animal) {
-        return animal.getCriticalChance() + (animal.getAgility() * 0.7);
+    public boolean getCriticalChance(Animal animal) {
+        return (int) (Math.random() * 100 + 1) <= (animal.getCriticalChance() + (animal.getAgility() * 0.05));
     }
 
     /*Метод getEvasion возвращает шанс уклонения от атаки в зависимости от ловкости входной сущности.
-     * Возвращает double.*/
+     * Возвращает boolean.*/
     @Override
-    public double getEvasion(Animal animal) {
-        return animal.getEvasion() + (animal.getAgility() * 0.9);
+    public boolean getEvasion(Animal animal) {
+        int random = (int) (Math.random() * 100 + 1);
+        return random <= (animal.getEvasion() + (animal.getAgility() * 0.05));
+
     }
 
-//    /*Метод getDefence возвращает физическую от атаки в зависимости от ловкости входной сущности.
-//     * Возвращает double.*/
-//    @Override
-//    public double getDefence(Animal animal) {
-//        return animal.getDefence() + (animal.getAgility() * 1.75);
-//    }
+    /*Метод getDefencePercent возвращает процент защиты сушности.
+     * Возвращает boolean.*/
+    @Override
+    public double getDefencePercent(Animal animal) {
+        return animal.getDefence() * 1.70;
+    }
 }

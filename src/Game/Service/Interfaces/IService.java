@@ -7,11 +7,11 @@ import java.io.IOException;
 public interface IService {
 
 
-    double getCriticalChance(Animal animal);
+    boolean getCriticalChance(Animal animal);
 
-    double getEvasion(Animal animal);
+    boolean getEvasion(Animal animal);
 
-//    double getDefence(double damage);
+    double getDefencePercent(Animal animal);
 
     double setDamageWithStrengthCat(Animal animal);
 
@@ -36,4 +36,6 @@ public interface IService {
     String getRandomName(String string);
 
     void showAnimalStats(Animal animal);
+
+    int hit(Animal animal1, Animal animal2);
 }

@@ -31,6 +31,8 @@ public class Main {
         service.showAnimalStats(computer);
 
         
+        service.flipACoin(user, computer);
+
 
     }
 
