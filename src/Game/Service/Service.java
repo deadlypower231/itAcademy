@@ -62,7 +62,7 @@ public class Service implements IService, ICreateHero {
                 }
             }
             System.out.println("Press any button!");
-            String s = getStringReader();
+            getStringReader();
         }
     }
 
@@ -84,7 +84,7 @@ public class Service implements IService, ICreateHero {
     }
 
     /*Метод chooseRace создает на выбор Кота или Собаку.*/
-    public Animal chooseRace() throws IOException {
+    public Animal chooseRace() {
         while (true) {
             System.out.println("Выберите 1 или 2");//test
             int i = getIntReader();
@@ -98,14 +98,11 @@ public class Service implements IService, ICreateHero {
     /*Метод getIntReader читает из консоли вводимое значение и проверяет - является ли это значение числом.
      * Возвращает целочисленное число.*/
     @Override
-    public int getIntReader() throws IOException {
+    public int getIntReader() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             try {
-                Integer i = Integer.parseInt(reader.readLine());
-                if (i instanceof Number) {
-                    return i;
-                }
+                return Integer.parseInt(reader.readLine());
             } catch (Exception e) {
                 System.out.println("Введите число:");
             }
@@ -118,8 +115,7 @@ public class Service implements IService, ICreateHero {
     @Override
     public String getStringReader() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String s = reader.readLine();
-        return s;
+        return reader.readLine();
     }
 
     /*Метод createHero создает пользовательскую сущность.
@@ -148,7 +144,7 @@ public class Service implements IService, ICreateHero {
     }
 
     /*Метод createComputerHero проверяет входное значение пользователя, и сверяет на схожесть.
-     * Cоздает компьютера с схожим классом и присваевает имя через метод getRandomName (Computer... + рандомное число).
+     * Создает компьютера с схожим классом и присваевает имя через метод getRandomName (Computer... + рандомное число).
      * Задает стандартные характеристики сущности.
      * Так же обновляет урон, защиту, здоровье, ману - в зависимости от характеристик.
      * Возвращает сущность.*/
