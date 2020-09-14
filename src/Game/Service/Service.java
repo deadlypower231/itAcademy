@@ -4,13 +4,17 @@ import Game.Animals.Animal;
 import Game.Animals.Cat;
 import Game.Animals.Dog;
 import Game.Service.Interfaces.ICreateHero;
+import Game.Service.Interfaces.ILoadFromFile;
+import Game.Service.Interfaces.ISaveToFile;
 import Game.Service.Interfaces.IService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Service implements IService, ICreateHero {
+public class Service implements IService, ICreateHero, ISaveToFile, ILoadFromFile {
+
+    public static final String TITLE = "~=~=~=~=~=~=~=~=~=~=~=~=~=~=~\n";
 
     /*Метод flipACoin пользователь и компьютер подбрасывает монету, кто побеждает - тот атакует первым!
      * Выводит в консоль рандомные значения.
@@ -67,16 +71,23 @@ public class Service implements IService, ICreateHero {
     }
 
     @Override
+    public double randomDamage(Animal animal) {
+        double random = Math.random()*3;
+        return (animal.getDamage()-1)+random;
+    }
+
+    @Override
     public int hit(Animal animal1, Animal animal2) {
         if (getEvasion(animal2)) {
             System.out.println(animal2.getName() + " dodges!");
         } else if (getCriticalChance(animal1)) {
-            double criticalDamage = animal1.getDamage() * animal1.getCriticalStrikeMultiplier();
+            double criticalDamage = randomDamage(animal1)* animal1.getCriticalStrikeMultiplier();
             double criticalDamageWithDefence = criticalDamage - criticalDamage / 100 * getDefencePercent(animal2);
             System.out.println(animal1.getName() + " deal " + (int) criticalDamageWithDefence + " critical damage!");
             animal2.setHealth(animal2.getHealth() - (int) criticalDamageWithDefence);
         } else {
-            double damage = animal1.getDamage() - animal1.getDamage() / 100 * getDefencePercent(animal2);
+            double randomDamage = randomDamage(animal1);
+            double damage = randomDamage - randomDamage / 100 * getDefencePercent(animal2);
             System.out.println(animal1.getName() + " deal " + (int) damage + " damage!");
             animal2.setHealth(animal2.getHealth() - (int) damage);
         }
@@ -86,7 +97,7 @@ public class Service implements IService, ICreateHero {
     /*Метод chooseRace создает на выбор Кота или Собаку.*/
     public Animal chooseRace() {
         while (true) {
-            System.out.println("Выберите 1 или 2");//test
+            System.out.println("Choose:\n1-Cat.\n2-Dog.");
             int i = getIntReader();
             if (i > 0 && i < 3) {
                 return (i == 1) ? new Cat() : new Dog();
@@ -116,6 +127,16 @@ public class Service implements IService, ICreateHero {
     public String getStringReader() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         return reader.readLine();
+    }
+
+    @Override
+    public void saveToFile(Animal animal) {
+
+    }
+
+    @Override
+    public void loadFromFile(String name) {
+
     }
 
     /*Метод createHero создает пользовательскую сущность.
@@ -301,5 +322,11 @@ public class Service implements IService, ICreateHero {
     @Override
     public double getDefencePercent(Animal animal) {
         return animal.getDefence() * 1.70;
+    }
+
+    public StringBuilder start(){
+        StringBuilder stringBuilder = new StringBuilder(TITLE);
+        stringBuilder.append("\t\tWelcome to FA\n").append(TITLE);
+        return stringBuilder;
     }
 }

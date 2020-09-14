@@ -38,4 +38,6 @@ public interface IService {
     void showAnimalStats(Animal animal);
 
     int hit(Animal animal1, Animal animal2);
+
+    double randomDamage(Animal animal);
 }

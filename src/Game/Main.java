@@ -9,11 +9,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+
         /*Создаем объекты.*/
         Animal user;
         Animal computer;
         Service service = new Service();
 
+        System.out.println(service.start());
         /*Выбираем вид героя, которым будем играть.
          * и создаем героя.*/
         user = service.chooseRace();
@@ -26,7 +28,7 @@ public class Main {
         service.showAnimalStats(user);
         service.showAnimalStats(computer);
 
-        /*Роллим кто ходит первым.
+        /*Роллим, кто ходит первым.
          * Начинаем бой с того кто выкинул найбольшее число!*/
         service.flipACoin(user, computer);
 
