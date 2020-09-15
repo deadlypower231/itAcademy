@@ -40,4 +40,8 @@ public interface IService {
     int hit(Animal animal1, Animal animal2);
 
     double randomDamage(Animal animal);
+
+    Animal loadOrCreate() throws IOException;
+
+    boolean exit();
 }

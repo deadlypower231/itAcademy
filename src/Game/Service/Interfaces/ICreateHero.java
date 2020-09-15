@@ -8,7 +8,7 @@ public interface ICreateHero {
 
     void createHero(Animal animal) throws IOException;
 
-    Animal createComputerHero( Animal user);
+    Animal createComputerHero(Animal user);
 
     void createHeroCat(Animal animal);
 

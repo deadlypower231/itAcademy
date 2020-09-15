@@ -6,6 +6,8 @@ public abstract class Animal {
 
     protected double level;
 
+    protected double experience;
+
     protected double health;
 
     protected double mana;
@@ -25,6 +27,8 @@ public abstract class Animal {
     protected double criticalChance;
 
     protected double evasion;
+
+    protected String type;
 
     public String getName() {
         return name;
@@ -120,5 +124,21 @@ public abstract class Animal {
 
     public void setEvasion(double evasion) {
         this.evasion = evasion;
+    }
+
+    public double getExperience() {
+        return experience;
+    }
+
+    public void setExperience(double experience) {
+        this.experience = experience;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

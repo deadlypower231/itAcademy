@@ -9,28 +9,21 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-
-        /*Создаем объекты.*/
         Animal user;
         Animal computer;
         Service service = new Service();
-
         System.out.println(service.start());
-        /*Выбираем вид героя, которым будем играть.
-         * и создаем героя.*/
-        user = service.chooseRace();
-        service.createHero(user);
-
-        /*Создаем компьютера от выбранного вида пользователя*/
-        computer = service.createComputerHero(user);
-
-        /*Выводим на экран характеристики пользователя и компьютера*/
-        service.showAnimalStats(user);
-        service.showAnimalStats(computer);
-
-        /*Роллим, кто ходит первым.
-         * Начинаем бой с того кто выкинул найбольшее число!*/
-        service.flipACoin(user, computer);
+        while (true) {
+            user = service.loadOrCreate();
+            computer = service.createComputerHero(user);
+            service.showAnimalStats(user);
+            service.showAnimalStats(computer);
+            service.flipACoin(user, computer);
+            service.saveToFile(user);
+            if (service.exit()) {
+                return;
+            }
+        }
 
 
     }
