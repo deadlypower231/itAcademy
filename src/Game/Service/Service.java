@@ -276,7 +276,6 @@ public class Service implements IService, ICreateHero, ISaveToFile, ILoadFromFil
     @Override
     public Map read(String fileName) {
         File file = new File(fileName);
-//        StringBuilder stringBuilder = new StringBuilder();
         Map<String, String> map = new HashMap<>();
         try {
             try (BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()))) {
@@ -523,11 +522,7 @@ public class Service implements IService, ICreateHero, ISaveToFile, ILoadFromFil
         while (true) {
             int i = getIntReader();
             if (i > 0 && i < 3) {
-                if (i == 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return (i == 1) ? true : false;
             }
         }
     }
