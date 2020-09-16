@@ -13,4 +13,8 @@ public interface ICreateHero {
     void createHeroCat(Animal animal);
 
     void createHeroDog(Animal animal);
+
+    void levelUp(Animal animal);
+
+    void setStatsNextLevel(Animal animal);
 }

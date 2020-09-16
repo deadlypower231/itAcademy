@@ -19,6 +19,7 @@ public class Main {
             service.showAnimalStats(user);
             service.showAnimalStats(computer);
             service.flipACoin(user, computer);
+            service.levelUp(user);
             service.saveToFile(user);
             if (service.exit()) {
                 return;

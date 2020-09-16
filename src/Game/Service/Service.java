@@ -342,23 +342,35 @@ public class Service implements IService, ICreateHero, ISaveToFile, ILoadFromFil
         if (user instanceof Cat) {
             Cat computer = new Cat();
             computer.setName(getRandomName("ComputerCat"));
-            computer.setLevel(user.getLevel());
+            computer.setLevel(1);
             createHeroCat(computer);
             computer.setDamage(setDamageWithStrengthCat(computer));
             computer.setDefence(setDefenceWithAgilityCat(computer));
             computer.setHealth(setHealthWithStrengthCat(computer));
             computer.setMana(setManaWithIntelligenceCat(computer));
+            while (computer.getLevel() != user.getLevel()) {
+                if (computer.getLevel() < user.getLevel()) {
+                    setStatsNextLevel(computer);
+                    computer.setLevel(computer.getLevel() + 1);
+                }
+            }
             return computer;
 
         } else {
             Dog computer = new Dog();
             computer.setName(getRandomName("ComputerDog"));
-            computer.setLevel(user.getLevel());
+            computer.setLevel(1);
             createHeroDog(computer);
             computer.setDamage(setDamageWithStrengthDog(computer));
             computer.setDefence(setDefenceWithAgilityDog(computer));
             computer.setHealth(setHealthWithStrengthDog(computer));
             computer.setMana(setManaWithIntelligenceDog(computer));
+            while (computer.getLevel() != user.getLevel()) {
+                if (computer.getLevel() < user.getLevel()) {
+                    setStatsNextLevel(computer);
+                    computer.setLevel(computer.getLevel() + 1);
+                }
+            }
             return computer;
         }
 
@@ -517,6 +529,44 @@ public class Service implements IService, ICreateHero, ISaveToFile, ILoadFromFil
                     return false;
                 }
             }
+        }
+    }
+
+    @Override
+    public void levelUp(Animal animal) {
+        int level = (int) animal.getLevel();
+        int levelUp = 100 * (level * (1 + level));
+        if (animal.getExperience() >= levelUp) {
+            animal.setLevel(animal.getLevel() + 1);
+            setStatsNextLevel(animal);
+        }
+    }
+
+    @Override
+    public void setStatsNextLevel(Animal animal) {
+        int level = (int) animal.getLevel();
+        if (animal instanceof Cat) {
+            animal.setHealth(animal.getHealth() + (10 + level * 2));
+            animal.setMana(animal.getMana() + (5 + level));
+            animal.setDamage(animal.getDamage() + (2 + level * 0.5));
+            animal.setStrength(animal.getStrength() + 1.25);
+            animal.setAgility(animal.getAgility() + 2.05);
+            animal.setIntelligence(animal.getIntelligence() + 0.95);
+            animal.setDamage(setDamageWithStrengthDog(animal));
+            animal.setDefence(setDefenceWithAgilityDog(animal));
+            animal.setHealth(setHealthWithStrengthDog(animal));
+            animal.setMana(setManaWithIntelligenceDog(animal));
+        } else if (animal instanceof Dog) {
+            animal.setHealth(animal.getHealth() + (12 + level * 2));
+            animal.setMana(animal.getMana() + (4 + level));
+            animal.setDamage(animal.getDamage() + (3 + level * 0.5));
+            animal.setStrength(animal.getStrength() + 2.25);
+            animal.setAgility(animal.getAgility() + 1.05);
+            animal.setIntelligence(animal.getIntelligence() + 0.85);
+            animal.setDamage(setDamageWithStrengthDog(animal));
+            animal.setDefence(setDefenceWithAgilityDog(animal));
+            animal.setHealth(setHealthWithStrengthDog(animal));
+            animal.setMana(setManaWithIntelligenceDog(animal));
         }
     }
 }
