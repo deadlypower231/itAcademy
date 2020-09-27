@@ -1,25 +1,36 @@
 package FightingAnimals.dao;
 
 import FightingAnimals.api.dao.IAnimalDao;
-import FightingAnimals.entities.Animal;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AnimalDao implements IAnimalDao {
 
-    public File loadFromFile(String name) {
-
+    @Override
+    public Map loadFromFile(String name) throws IOException {
+        Map<String, String> stats = new HashMap<>();
         String path = "C:\\Users\\User\\Documents\\FA\\" + name + ".txt";
         File file = new File(path);
-        return file;
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            String[] strings = line.split(" ");
+            stats.put(strings[0], strings[1]);
+        }
+        return stats;
 
     }
 
-    public void saveToFile(File file, String name){
-        String path = "C:\\Users\\User\\Documents\\FA\\" + name + ".txt";
-        
+    @Override
+    public void saveToFile(StringBuilder stats, String diretory, String name) throws FileNotFoundException {
+        String path = "C:\\Users\\User\\Documents\\FA\\" + diretory + name + ".txt";
+        File file = new File(path);
+        PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+        out.print(stats);
+        out.close();
     }
 
 }

@@ -27,8 +27,6 @@ public abstract class Animal {
 
     protected double criticalChance;
 
-    protected double evasion;
-
     protected String type;
 
     public String getName() {
@@ -117,14 +115,6 @@ public abstract class Animal {
 
     public void setCriticalChance(double criticalChance) {
         this.criticalChance = criticalChance;
-    }
-
-    public double getEvasion() {
-        return evasion;
-    }
-
-    public void setEvasion(double evasion) {
-        this.evasion = evasion;
     }
 
     public double getExperience() {
