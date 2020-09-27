@@ -5,6 +5,7 @@ import FightingAnimals.entities.Animal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,72 @@ public class AnimalDao implements IAnimalDao {
             String fileName = "C:\\Users\\User\\Documents\\FA\\Dog\\" + animal.getName().toLowerCase() + ".txt";
             write(fileName, stats);
         }
+    }
+
+    @Override
+    public Animal loadFromFile() throws IOException {
+        Animal animal = chooseRace();
+        String directory;
+        System.out.println("Enter your name: ");
+        String fileName = null;
+        if (animal instanceof Cat) {
+            directory = "C:\\Users\\User\\Documents\\FA\\Cat\\";
+            fileName = exists(directory, getStringReader());
+        } else if (animal instanceof Dog) {
+            directory = "C:\\Users\\User\\Documents\\FA\\Dog\\";
+            fileName = exists(directory, getStringReader());
+        }
+        Map<String, String> map = read(fileName);
+        for (Map.Entry<String, String> s :
+                map.entrySet()) {
+            switch (s.getKey()) {
+                case "id0:":
+                    animal.setType(s.getValue());
+                    break;
+                case "id1:":
+                    animal.setName(s.getValue());
+                    break;
+                case "id2:":
+                    animal.setLevel(Double.parseDouble(s.getValue()));
+                    break;
+                case "id3:":
+                    animal.setExperience(Double.parseDouble(s.getValue()));
+                    break;
+                case "id4:":
+                    animal.setHealth(Double.parseDouble(s.getValue()));
+                    break;
+                case "id5:":
+                    animal.setMana(Double.parseDouble(s.getValue()));
+                    break;
+                case "id6:":
+                    animal.setDamage(Double.parseDouble(s.getValue()));
+                    break;
+                case "id7:":
+                    animal.setDefence(Double.parseDouble(s.getValue()));
+                    break;
+                case "id8:":
+                    animal.setStrength(Double.parseDouble(s.getValue()));
+                    break;
+                case "id9:":
+                    animal.setAgility(Double.parseDouble(s.getValue()));
+                    break;
+                case "id10:":
+                    animal.setIntelligence(Double.parseDouble(s.getValue()));
+                    break;
+                case "id11:":
+                    animal.setCriticalChance(Double.parseDouble(s.getValue()));
+                    break;
+                case "id12:":
+                    animal.setCriticalStrikeMultiplier(Double.parseDouble(s.getValue()));
+                    break;
+                case "id13:":
+                    animal.setEvasion(Double.parseDouble(s.getValue()));
+                    break;
+            }
+        }
+
+        return animal;
+
     }
 
     @Override
