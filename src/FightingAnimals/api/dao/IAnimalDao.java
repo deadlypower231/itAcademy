@@ -8,4 +8,6 @@ public interface IAnimalDao {
 
     void saveToFile(Animal animal) throws FileNotFoundException;
 
+    void write(String fileName, StringBuilder stats) throws FileNotFoundException;
+
 }

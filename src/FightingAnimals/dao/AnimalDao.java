@@ -3,7 +3,9 @@ package FightingAnimals.dao;
 import FightingAnimals.api.dao.IAnimalDao;
 import FightingAnimals.entities.Animal;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +40,14 @@ public class AnimalDao implements IAnimalDao {
             String fileName = "C:\\Users\\User\\Documents\\FA\\Dog\\" + animal.getName().toLowerCase() + ".txt";
             write(fileName, stats);
         }
+    }
+
+    @Override
+    public void write(String fileName, StringBuilder stats) throws FileNotFoundException {
+        File file = new File(fileName);
+        PrintWriter out = new PrintWriter(file.getAbsoluteFile());
+        out.print(stats);
+        out.close();
     }
 
 }
