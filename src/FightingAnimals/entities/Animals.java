@@ -1,4 +1,7 @@
 package FightingAnimals.entities;
 
-public class Animals {
+public abstract class Animals {
+
+    
+
 }
