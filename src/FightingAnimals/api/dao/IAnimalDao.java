@@ -4,6 +4,7 @@ import FightingAnimals.entities.Animal;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Map;
 
 public interface IAnimalDao {
 
@@ -12,5 +13,7 @@ public interface IAnimalDao {
     void write(String fileName, StringBuilder stats) throws FileNotFoundException;
 
     Animal loadFromFile() throws IOException;
+
+    Map read(String fileName) throws Exception;
 
 }

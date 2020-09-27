@@ -3,10 +3,7 @@ package FightingAnimals.dao;
 import FightingAnimals.api.dao.IAnimalDao;
 import FightingAnimals.entities.Animal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,6 +104,22 @@ public class AnimalDao implements IAnimalDao {
 
         return animal;
 
+    }
+
+    @Override
+    public Map read(String fileName) throws Exception {
+        File file = new File(fileName);
+        Map<String, String> map = new HashMap<>();
+
+        BufferedReader reader = new BufferedReader(new FileReader(file.getAbsoluteFile()));
+        String s;
+        while ((s = reader.readLine()) != null) {
+            String[] string = s.split(" ");
+            map.put(string[0], string[1]);
+
+        }
+
+        return map;
     }
 
     @Override
