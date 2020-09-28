@@ -11,8 +11,10 @@ public class Main {
 
         IAnimalService animalService = new AnimalService();
         Animal animal;
-        animal = animalService.loadFromFile("qwe");
-        animalService.saveToFile(animal);
+        Animal computer;
+        animal = animalService.loadOrCreate();
+        computer = animalService.createComputerAnimal(animal);
+        System.out.println(animal+ "\n"+ computer);
 
 
     }

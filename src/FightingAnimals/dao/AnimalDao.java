@@ -25,8 +25,8 @@ public class AnimalDao implements IAnimalDao {
     }
 
     @Override
-    public void saveToFile(StringBuilder stats, String diretory, String name) throws FileNotFoundException {
-        String path = "C:\\Users\\User\\Documents\\FA\\" + diretory + name + ".txt";
+    public void saveToFile(StringBuilder stats, String name) throws FileNotFoundException {
+        String path = "C:\\Users\\User\\Documents\\FA\\"  + name + ".txt";
         File file = new File(path);
         PrintWriter out = new PrintWriter(file.getAbsoluteFile());
         out.print(stats);

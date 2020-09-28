@@ -15,8 +15,62 @@ public class AnimalService implements IAnimalService {
     IAnimalDao animalDao = new AnimalDao();
 
     @Override
+    public Animal loadOrCreate() {
+        Animal animal;
+        while (true) {
+            System.out.println("\nLoad a hero or create a new hero?\n1-Load.\n2-Create.");
+            int i = getIntReader();
+            if (i > 0 && i < 3) {
+                if (i == 1) {
+                    System.out.println("ВВедите имя загружаемого животного: ");
+                    try {
+                        return loadFromFile(exists(getName()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    animal = chooseRace();
+                    System.out.println("Введите имя создоваемого животного: ");
+                    animal.setName(getName());
+                    createHero(animal);
+                    return animal;
+                }
+            }
+        }
+    }
+
+    @Override
+    public Animal chooseRace() {
+        while (true) {
+            System.out.println("Choose:\n1-Cat.\n2-Dog.");
+            int i = getIntReader();
+            if (i > 0 && i < 3) {
+                return (i == 1) ? new Cat() : new Dog();
+            }
+        }
+    }
+
+    @Override
+    public Animal createComputerAnimal(Animal animal) {
+        Animal computer = null;
+        if (animal instanceof Cat) {
+            computer = new Cat();
+            computer.setName("ComputerCat");
+            createHero(computer);
+            computer.setLevel(animal.getLevel());
+        } else if (animal instanceof Dog) {
+            computer = new Dog();
+            computer.setName("ComputerDog");
+            createHero(computer);
+            computer.setLevel(animal.getLevel());
+        }
+
+        return computer;
+    }
+
+    @Override
     public Animal createHero(Animal animal) {
-        if (animal instanceof Cat){
+        if (animal instanceof Cat) {
             animal.setLevel(1);
             animal.setType("cat");
             animal.setHealth(100);
@@ -28,7 +82,7 @@ public class AnimalService implements IAnimalService {
             animal.setIntelligence(2);
             animal.setCriticalChance(3);
             animal.setCriticalStrikeMultiplier(2);
-        }else if (animal instanceof Dog){
+        } else if (animal instanceof Dog) {
             animal.setType("dog");
             animal.setHealth(100);
             animal.setMana(25);
@@ -44,9 +98,15 @@ public class AnimalService implements IAnimalService {
     }
 
     @Override
-    public String getName() throws IOException {
+    public String getName() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            return reader.readLine();
+        while (true) {
+            try {
+                return reader.readLine();
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
 
     }
 
@@ -64,12 +124,6 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public void saveToFile(Animal animal) {
-        String directory = null;
-        if (animal instanceof Cat){
-            directory = "Cat\\";
-        }else if (animal instanceof Dog){
-            directory = "Dog\\";
-        }
         StringBuilder stats = new StringBuilder()
                 .append("id0: ").append(animal.getType())
                 .append("\nid1: ").append(animal.getName())
@@ -85,23 +139,24 @@ public class AnimalService implements IAnimalService {
                 .append("\nid11: ").append(animal.getCriticalChance())
                 .append("\nid12: ").append(animal.getCriticalStrikeMultiplier());
         try {
-            animalDao.saveToFile(stats,directory,animal.getName());
+            animalDao.saveToFile(stats, animal.getName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public Animal loadFromFile(String name){
+    public Animal loadFromFile(String name) {
         Animal animal = null;
+
         try {
 
             Map<String, String> stats = animalDao.loadFromFile(name);
-            for (Map.Entry<String, String> type: stats.entrySet() ){
-                if (type.getKey().equals("id0:")){
-                    if (type.getValue().equals("cat")){
+            for (Map.Entry<String, String> type : stats.entrySet()) {
+                if (type.getKey().equals("id0:")) {
+                    if (type.getValue().equals("cat")) {
                         animal = new Cat();
-                    }else if (type.getValue().equals("dog")){
+                    } else if (type.getValue().equals("dog")) {
                         animal = new Dog();
                     }
                     break;
@@ -153,10 +208,22 @@ public class AnimalService implements IAnimalService {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("ошибка, нет такого файла");
         }
 
         return animal;
+    }
+
+    @Override
+    public String exists(String fileName) throws IOException {
+        String fullName = "C:\\Users\\User\\Documents\\FA\\" + fileName + ".txt";
+        File file = new File(fullName);
+        while (!file.exists()) {
+            System.out.println("File does not exists!");
+            System.out.println("ENTER_YOUR_NAME");
+            return exists(getName());
+        }
+        return fileName;
     }
 
 }

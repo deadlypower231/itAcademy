@@ -11,7 +11,7 @@ public interface IAnimalDao {
 
     Map loadFromFile(String name) throws IOException;
 
-    void saveToFile(StringBuilder stats,String directory, String name) throws FileNotFoundException;
+    void saveToFile(StringBuilder stats, String name) throws FileNotFoundException;
 
 
 }
