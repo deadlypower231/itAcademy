@@ -1,9 +1,10 @@
 package FightingAnimals.entities;
 
 public class Cat extends Animal {
+
     @Override
     public String toString() {
-        return  "name=" + name + "\n" +
+        return "name=" + name + "\n" +
                 "level=" + level + "\n" +
                 "experience=" + experience + "\n" +
                 "health=" + health + "\n" +

@@ -10,7 +10,7 @@ import java.util.Map;
 public class AnimalDao implements IAnimalDao {
 
     @Override
-    public Map loadFromFile(String name) throws IOException {
+    public Map<String, String> loadFromFile(String name) throws IOException {
         Map<String, String> stats = new HashMap<>();
         String path = "C:\\Users\\User\\Documents\\FA\\" + name + ".txt";
         File file = new File(path);

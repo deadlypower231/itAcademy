@@ -2,15 +2,21 @@ package FightingAnimals.services;
 
 import FightingAnimals.api.dao.IAnimalDao;
 import FightingAnimals.api.service.IAnimalService;
+import FightingAnimals.api.service.IBattle;
+import FightingAnimals.api.utils.ISetStatsNextLevel;
 import FightingAnimals.dao.AnimalDao;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.entities.Cat;
 import FightingAnimals.entities.Dog;
+import FightingAnimals.utils.SetStatsNextLevel;
 
 import java.io.*;
 import java.util.Map;
 
 public class AnimalService implements IAnimalService {
+
+    public static final String TITLE = "~=~=~=~=~=~=~=~=~=~=~=~=~=~=~\n";
+    public static final String ENTER_YOUR_NAME = "Enter your name: ";
 
     IAnimalDao animalDao = new AnimalDao();
 
@@ -22,15 +28,15 @@ public class AnimalService implements IAnimalService {
             int i = getIntReader();
             if (i > 0 && i < 3) {
                 if (i == 1) {
-                    System.out.println("ВВедите имя загружаемого животного: ");
+                    System.out.println(ENTER_YOUR_NAME);
                     try {
                         return loadFromFile(exists(getName()));
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     animal = chooseRace();
-                    System.out.println("Введите имя создоваемого животного: ");
+                    System.out.println(ENTER_YOUR_NAME);
                     animal.setName(getName());
                     createHero(animal);
                     return animal;
@@ -52,24 +58,31 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public Animal createComputerAnimal(Animal animal) {
+        ISetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
         Animal computer = null;
         if (animal instanceof Cat) {
             computer = new Cat();
             computer.setName("ComputerCat");
             createHero(computer);
             computer.setLevel(animal.getLevel());
+            if(animal.getLevel()>1) {
+                setStatsNextLevel.setStatsNextLevel(computer);
+            }
         } else if (animal instanceof Dog) {
             computer = new Dog();
             computer.setName("ComputerDog");
             createHero(computer);
             computer.setLevel(animal.getLevel());
+            if(animal.getLevel()>1) {
+                setStatsNextLevel.setStatsNextLevel(computer);
+            }
         }
 
         return computer;
     }
 
     @Override
-    public Animal createHero(Animal animal) {
+    public void createHero(Animal animal) {
         if (animal instanceof Cat) {
             animal.setLevel(1);
             animal.setType("cat");
@@ -83,6 +96,7 @@ public class AnimalService implements IAnimalService {
             animal.setCriticalChance(3);
             animal.setCriticalStrikeMultiplier(2);
         } else if (animal instanceof Dog) {
+            animal.setLevel(1);
             animal.setType("dog");
             animal.setHealth(100);
             animal.setMana(25);
@@ -94,7 +108,6 @@ public class AnimalService implements IAnimalService {
             animal.setCriticalChance(3);
             animal.setCriticalStrikeMultiplier(2);
         }
-        return null;
     }
 
     @Override
@@ -104,7 +117,7 @@ public class AnimalService implements IAnimalService {
             try {
                 return reader.readLine();
             } catch (IOException e) {
-                System.out.println(e);
+                System.out.println("Reader, exception");
             }
         }
 
@@ -117,7 +130,7 @@ public class AnimalService implements IAnimalService {
             try {
                 return Integer.parseInt(reader.readLine());
             } catch (Exception e) {
-                System.out.println("Введите число:");
+                System.out.println("Enter number:");
             }
         }
     }
@@ -208,22 +221,80 @@ public class AnimalService implements IAnimalService {
                 }
             }
         } catch (IOException e) {
-            System.out.println("ошибка, нет такого файла");
+            System.out.println(e);
         }
 
         return animal;
     }
 
     @Override
-    public String exists(String fileName) throws IOException {
+    public String exists(String fileName) {
         String fullName = "C:\\Users\\User\\Documents\\FA\\" + fileName + ".txt";
         File file = new File(fullName);
-        while (!file.exists()) {
+        if (!file.exists()) {
             System.out.println("File does not exists!");
-            System.out.println("ENTER_YOUR_NAME");
+            System.out.println(ENTER_YOUR_NAME);
             return exists(getName());
         }
         return fileName;
+    }
+
+
+    @Override
+    public void flipACoin(Animal user, Animal computer) {
+        IBattle iBattle = new Battle();
+        int userThrows = 0;
+        int computerThrows = 0;
+        while (userThrows == computerThrows) {
+            userThrows = (int) (Math.random() * 100 + 1);
+            computerThrows = (int) (Math.random() * 100 + 1);
+        }
+        if (userThrows > computerThrows) {
+            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
+                    computerThrows + "\n" + user.getName() + " attacks first!\n");
+            iBattle.battle(user, computer);
+        } else {
+
+            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
+                    computerThrows + "\n" + computer.getName() + " attacks first!\n");
+            iBattle.battle(computer, user);
+        }
+    }
+
+    @Override
+    public void levelUp(Animal animal) {
+        ISetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
+        int level = (int) animal.getLevel();
+        int levelUp = 100 * (level * (1 + level));
+        if (animal.getExperience() >= levelUp) {
+            animal.setLevel(animal.getLevel() + 1);
+            setStatsNextLevel.setStatsNextLevel(animal);
+        }
+    }
+
+    @Override
+    public StringBuilder start() {
+        StringBuilder stringBuilder = new StringBuilder(TITLE);
+        stringBuilder.append("\t\tWelcome to FA\n").append(TITLE);
+        return stringBuilder;
+    }
+
+    /**
+     * Метод exit запрашивает у пользователя, продолжить покинуть игру или нет.
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean exit() {
+        System.out.println("Quit the game?\n1-Yes.\n2-No.\n");
+        while (true) {
+            int i = getIntReader();
+            if (i == 1) {
+                return true;
+            } else if (i == 2) {
+                return false;
+            }
+        }
     }
 
 }
