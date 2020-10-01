@@ -2,7 +2,6 @@ package FightingAnimals.services;
 
 import FightingAnimals.api.service.IAnimalService;
 import FightingAnimals.api.service.IBattle;
-import FightingAnimals.api.utils.IGetStats;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.utils.GetStats;
 
@@ -82,7 +81,7 @@ public class Battle implements IBattle {
     @Override
     public int hit(Animal animal1, Animal animal2) {
 
-        IGetStats getStats = new GetStats();
+        GetStats getStats = new GetStats();
 
         if (getStats.getEvasion(animal2)) {
             System.out.println(animal2.getName() + " dodges!");

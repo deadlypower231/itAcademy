@@ -3,53 +3,61 @@ package FightingAnimals.services;
 import FightingAnimals.api.dao.IAnimalDao;
 import FightingAnimals.api.service.IAnimalService;
 import FightingAnimals.api.service.IBattle;
-import FightingAnimals.api.utils.ISetStatsNextLevel;
 import FightingAnimals.dao.AnimalDao;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.entities.Cat;
 import FightingAnimals.entities.Dog;
 import FightingAnimals.utils.SetStatsNextLevel;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.Map;
 
 public class AnimalService implements IAnimalService {
 
-    public static final String TITLE = "~=~=~=~=~=~=~=~=~=~=~=~=~=~=~\n";
-    public static final String ENTER_YOUR_NAME = "Enter your name: ";
+    private static final String TITLE = "~=~=~=~=~=~=~=~=~=~=~=~=~=~=~\n";
+    private static final String ENTER_YOUR_NAME = "Enter your name: ";
 
     IAnimalDao animalDao = new AnimalDao();
 
     @Override
     public Animal loadOrCreate() {
-        Animal animal;
-        while (true) {
-            System.out.println("\nLoad a hero or create a new hero?\n1-Load.\n2-Create.");
-            int i = getIntReader();
-            if (i > 0 && i < 3) {
-                if (i == 1) {
-                    System.out.println(ENTER_YOUR_NAME);
-                    try {
-                        return loadFromFile(exists(getName()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    animal = chooseRace();
-                    System.out.println(ENTER_YOUR_NAME);
-                    animal.setName(getName());
-                    createHero(animal);
-                    return animal;
+        Animal animal = null;
+        boolean isLoadOrCreate = true;
+        System.out.println("\nLoad a hero or create a new hero?\n1-Load.\n2-Create.");
+        int i = 0;
+        i = getIntReader();
+
+        if (i > 0 && i < 3) {
+            if (i == 1) {
+                System.out.println(ENTER_YOUR_NAME);
+                try {
+                    isLoadOrCreate = false;
+                    animal = loadFromFile(exists(getName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            } else {
+
+                animal = chooseRace();
+                System.out.println(ENTER_YOUR_NAME);
+                animal.setName(getName());
+                createHero(animal);
+                return animal;
             }
+        } else {
+            loadOrCreate();
         }
+
+        return animal;
     }
 
     @Override
     public Animal chooseRace() {
         while (true) {
             System.out.println("Choose:\n1-Cat.\n2-Dog.");
-            int i = getIntReader();
+            int i = 0;
+            i = getIntReader();
             if (i > 0 && i < 3) {
                 return (i == 1) ? new Cat() : new Dog();
             }
@@ -58,14 +66,14 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public Animal createComputerAnimal(Animal animal) {
-        ISetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
+        SetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
         Animal computer = null;
         if (animal instanceof Cat) {
             computer = new Cat();
             computer.setName("ComputerCat");
             createHero(computer);
             computer.setLevel(animal.getLevel());
-            if(animal.getLevel()>1) {
+            if (animal.getLevel() > 1) {
                 setStatsNextLevel.setStatsNextLevel(computer);
             }
         } else if (animal instanceof Dog) {
@@ -73,7 +81,7 @@ public class AnimalService implements IAnimalService {
             computer.setName("ComputerDog");
             createHero(computer);
             computer.setLevel(animal.getLevel());
-            if(animal.getLevel()>1) {
+            if (animal.getLevel() > 1) {
                 setStatsNextLevel.setStatsNextLevel(computer);
             }
         }
@@ -112,27 +120,38 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public String getName() {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                return reader.readLine();
-            } catch (IOException e) {
-                System.out.println("Reader, exception");
-            }
-        }
+        String string = null;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            string = reader.readLine();
+        } catch (Exception e) {
 
+        }
+//
+//        while (true) {
+//            try {
+//                string = reader.readLine();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        return string;
+        return string;
     }
 
     @Override
     public int getIntReader() {
+        int number = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            try {
-                return Integer.parseInt(reader.readLine());
-            } catch (Exception e) {
-                System.out.println("Enter number:");
-            }
+        try {
+            number = Integer.parseInt(reader.readLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Enter number:");
+            getIntReader();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return number;
     }
 
     @Override
@@ -263,7 +282,7 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public void levelUp(Animal animal) {
-        ISetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
+        SetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
         int level = (int) animal.getLevel();
         int levelUp = 100 * (level * (1 + level));
         if (animal.getExperience() >= levelUp) {

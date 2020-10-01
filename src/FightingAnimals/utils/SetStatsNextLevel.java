@@ -1,13 +1,11 @@
 package FightingAnimals.utils;
 
-import FightingAnimals.api.utils.ISetStatsNextLevel;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.entities.Cat;
 import FightingAnimals.entities.Dog;
 
-public class SetStatsNextLevel implements ISetStatsNextLevel {
+public class SetStatsNextLevel{
 
-    @Override
     public void setStatsNextLevel(Animal animal) {
         int level = (int) animal.getLevel();
         if (animal instanceof Cat) {
