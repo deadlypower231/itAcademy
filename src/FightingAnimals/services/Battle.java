@@ -1,13 +1,10 @@
 package FightingAnimals.services;
 
-import FightingAnimals.api.service.IAnimalService;
 import FightingAnimals.api.service.IBattle;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.utils.GetStats;
 
 public class Battle implements IBattle {
-
-    IAnimalService animalService = new AnimalService();
 
     @Override
     public void battle(Animal animal1, Animal animal2) {
@@ -47,39 +44,16 @@ public class Battle implements IBattle {
                 }
             }
             System.out.println("Press enter!");
-            animalService.getName();
-
+            AnimalService.getName();
         }
     }
 
-    @Override
-    public void flipACoin(Animal user, Animal computer) {
-        int userThrows = 0;
-        int computerThrows = 0;
-        while (userThrows == computerThrows) {
-            userThrows = (int) (Math.random() * 100 + 1);
-            computerThrows = (int) (Math.random() * 100 + 1);
-        }
-        if (userThrows > computerThrows) {
-            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
-                    computerThrows + "\n" + user.getName() + " attacks first!\n");
-            battle(user, computer);
-        } else {
-
-            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
-                    computerThrows + "\n" + computer.getName() + " attacks first!\n");
-            battle(computer, user);
-        }
-    }
-
-    @Override
-    public double randomDamage(Animal animal) {
+    private double randomDamage(Animal animal) {
         double random = Math.random() * 3;
         return (animal.getDamage() - 1) + random;
     }
 
-    @Override
-    public int hit(Animal animal1, Animal animal2) {
+    private int hit(Animal animal1, Animal animal2) {
 
         GetStats getStats = new GetStats();
 

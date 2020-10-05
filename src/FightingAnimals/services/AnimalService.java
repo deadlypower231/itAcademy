@@ -8,10 +8,11 @@ import FightingAnimals.entities.Animal;
 import FightingAnimals.entities.Cat;
 import FightingAnimals.entities.Dog;
 import FightingAnimals.utils.SetStatsNextLevel;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 import java.io.*;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AnimalService implements IAnimalService {
 
@@ -20,48 +21,61 @@ public class AnimalService implements IAnimalService {
 
     IAnimalDao animalDao = new AnimalDao();
 
+    private boolean checkName(String name) {
+        Pattern pattern = Pattern.compile("[A-Z][a-z]{2,9}");
+        Matcher matcher = pattern.matcher(name);
+        boolean isCheckName = matcher.matches();
+        if (isCheckName) {
+            File file = new File("src\\FightingAnimals\\save\\" + name + ".txt");
+            if (file.exists()) {
+                System.out.println("This name exists!");
+                return false;
+            }
+        }
+        return matcher.matches();
+    }
+
     @Override
     public Animal loadOrCreate() {
-        Animal animal = null;
-        boolean isLoadOrCreate = true;
+        Animal animal;
         System.out.println("\nLoad a hero or create a new hero?\n1-Load.\n2-Create.");
-        int i = 0;
-        i = getIntReader();
-
-        if (i > 0 && i < 3) {
-            if (i == 1) {
-                System.out.println(ENTER_YOUR_NAME);
-                try {
-                    isLoadOrCreate = false;
-                    animal = loadFromFile(exists(getName()));
-                } catch (Exception e) {
-                    e.printStackTrace();
+        int i = getIntReader();
+        if (i == 1) {
+            System.out.println(ENTER_YOUR_NAME);
+            animal = loadFromFile(exists(getName()));
+        } else if (i == 2) {
+            animal = chooseRace();
+            System.out.println(ENTER_YOUR_NAME);
+            String name;
+            boolean isCheckName = true;
+            while (isCheckName) {
+                name = getName();
+                if (checkName(name)) {
+                    animal.setName(name);
+                    isCheckName = false;
+                } else {
+                    System.out.println(ENTER_YOUR_NAME);
                 }
-            } else {
-
-                animal = chooseRace();
-                System.out.println(ENTER_YOUR_NAME);
-                animal.setName(getName());
-                createHero(animal);
-                return animal;
             }
+            createHero(animal);
         } else {
-            loadOrCreate();
+            return loadOrCreate();
         }
-
         return animal;
     }
 
     @Override
     public Animal chooseRace() {
-        while (true) {
-            System.out.println("Choose:\n1-Cat.\n2-Dog.");
-            int i = 0;
-            i = getIntReader();
-            if (i > 0 && i < 3) {
-                return (i == 1) ? new Cat() : new Dog();
-            }
+        Animal animal;
+        System.out.println("Choose:\n1-Cat.\n2-Dog.");
+        int i;
+        i = getIntReader();
+        if (i > 0 && i < 3) {
+            animal = (i == 1) ? new Cat() : new Dog();
+        } else {
+            return chooseRace();
         }
+        return animal;
     }
 
     @Override
@@ -85,12 +99,10 @@ public class AnimalService implements IAnimalService {
                 setStatsNextLevel.setStatsNextLevel(computer);
             }
         }
-
         return computer;
     }
 
-    @Override
-    public void createHero(Animal animal) {
+    private void createHero(Animal animal) {
         if (animal instanceof Cat) {
             animal.setLevel(1);
             animal.setType("cat");
@@ -118,38 +130,28 @@ public class AnimalService implements IAnimalService {
         }
     }
 
-    @Override
-    public String getName() {
+    static String getName() {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String string = null;
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        try {
             string = reader.readLine();
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            System.out.println("IOError");
         }
-//
-//        while (true) {
-//            try {
-//                string = reader.readLine();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        return string;
         return string;
     }
 
-    @Override
-    public int getIntReader() {
-        int number = 0;
+    private int getIntReader() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            number = Integer.parseInt(reader.readLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Enter number:");
-            getIntReader();
-        } catch (IOException e) {
-            e.printStackTrace();
+        int number = 0;
+        boolean isReader = true;
+        while (isReader) {
+            try {
+                number = Integer.parseInt(reader.readLine());
+                isReader = false;
+            } catch (NumberFormatException | IOException e) {
+                System.out.println("Enter number: ");
+            }
         }
         return number;
     }
@@ -180,21 +182,9 @@ public class AnimalService implements IAnimalService {
     @Override
     public Animal loadFromFile(String name) {
         Animal animal = null;
-
         try {
-
             Map<String, String> stats = animalDao.loadFromFile(name);
-            for (Map.Entry<String, String> type : stats.entrySet()) {
-                if (type.getKey().equals("id0:")) {
-                    if (type.getValue().equals("cat")) {
-                        animal = new Cat();
-                    } else if (type.getValue().equals("dog")) {
-                        animal = new Dog();
-                    }
-                    break;
-                }
-            }
-
+            animal = (stats.get("id0:").equals("cat")) ? new Cat() : new Dog();
             for (Map.Entry<String, String> s :
                     stats.entrySet()) {
                 switch (s.getKey()) {
@@ -240,15 +230,14 @@ public class AnimalService implements IAnimalService {
                 }
             }
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("Exception");
         }
-
         return animal;
     }
 
     @Override
     public String exists(String fileName) {
-        String fullName = "C:\\Users\\User\\Documents\\FA\\" + fileName + ".txt";
+        String fullName = "src\\FightingAnimals\\save\\" + fileName + ".txt";
         File file = new File(fullName);
         if (!file.exists()) {
             System.out.println("File does not exists!");
@@ -306,16 +295,14 @@ public class AnimalService implements IAnimalService {
     @Override
     public boolean exit() {
         System.out.println("Quit the game?\n1-Yes.\n2-No.\n");
-        while (true) {
-            int i = getIntReader();
-            if (i == 1) {
-                return true;
-            } else if (i == 2) {
-                return false;
-            }
+        int i = getIntReader();
+        if (i == 1) {
+            return true;
+        } else if (i == 2) {
+            return false;
+        } else {
+            return exit();
         }
     }
 
 }
-
-

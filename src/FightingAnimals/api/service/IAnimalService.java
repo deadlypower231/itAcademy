@@ -2,8 +2,6 @@ package FightingAnimals.api.service;
 
 import FightingAnimals.entities.Animal;
 
-import java.io.IOException;
-
 public interface IAnimalService {
 
     Animal loadOrCreate();
@@ -15,11 +13,6 @@ public interface IAnimalService {
     Animal loadFromFile(String name);
 
     void saveToFile(Animal animal);
-
-    void createHero(Animal animal);
-
-    String getName();
-    int getIntReader() throws IOException;
 
     String exists(String fileName);
 
