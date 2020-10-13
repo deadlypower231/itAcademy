@@ -1,14 +1,17 @@
 package FightingAnimals;
 
 import FightingAnimals.api.service.IAnimalService;
+import FightingAnimals.api.service.IBattle;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.services.AnimalService;
+import FightingAnimals.services.Battle;
 
 public class Main {
 
     public static void main(String[] args) {
 
         IAnimalService animalService = new AnimalService();
+        IBattle battle = new Battle();
         Animal animal;
         Animal computer;
         System.out.println(animalService.start());
@@ -16,9 +19,9 @@ public class Main {
             animal = animalService.loadOrCreate();
             computer = animalService.createComputerAnimal(animal);
             System.out.println(animal + "\n" + computer);
-            animalService.flipACoin(animal, computer);
-            animalService.levelUp(animal);
-            animalService.saveToFile(animal);
+            animal = battle.battle(animal, computer);
+            AnimalService.levelUp(animal);
+            AnimalService.saveToFile(animal);
             if (animalService.exit()) {
                 return;
             }

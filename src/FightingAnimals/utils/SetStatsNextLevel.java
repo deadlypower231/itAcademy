@@ -6,7 +6,11 @@ import FightingAnimals.entities.Dog;
 
 public class SetStatsNextLevel {
 
-    public void setStatsNextLevel(Animal animal) {
+    private SetStatsNextLevel(){
+
+    }
+
+    public static void setStatsNextLevel(Animal animal) {
         if (animal instanceof Cat) {
             animal.setHealth(100);
             animal.setMana(25);

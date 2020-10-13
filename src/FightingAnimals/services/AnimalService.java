@@ -2,7 +2,6 @@ package FightingAnimals.services;
 
 import FightingAnimals.api.dao.IAnimalDao;
 import FightingAnimals.api.service.IAnimalService;
-import FightingAnimals.api.service.IBattle;
 import FightingAnimals.dao.AnimalDao;
 import FightingAnimals.entities.Animal;
 import FightingAnimals.entities.Cat;
@@ -19,7 +18,7 @@ public class AnimalService implements IAnimalService {
     private static final String TITLE = "~=~=~=~=~=~=~=~=~=~=~=~=~=~=~\n";
     private static final String ENTER_YOUR_NAME = "Enter your name: ";
 
-    IAnimalDao animalDao = new AnimalDao();
+    static IAnimalDao animalDao = new AnimalDao();
 
     private boolean checkName(String name) {
         Pattern pattern = Pattern.compile("[A-Z][a-z]{2,9}");
@@ -32,7 +31,7 @@ public class AnimalService implements IAnimalService {
                 return false;
             }
         }
-        return matcher.matches();
+        return isCheckName;
     }
 
     @Override
@@ -80,7 +79,6 @@ public class AnimalService implements IAnimalService {
 
     @Override
     public Animal createComputerAnimal(Animal animal) {
-        SetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
         Animal computer = null;
         if (animal instanceof Cat) {
             computer = new Cat();
@@ -88,7 +86,7 @@ public class AnimalService implements IAnimalService {
             createHero(computer);
             computer.setLevel(animal.getLevel());
             if (animal.getLevel() > 1) {
-                setStatsNextLevel.setStatsNextLevel(computer);
+                SetStatsNextLevel.setStatsNextLevel(computer);
             }
         } else if (animal instanceof Dog) {
             computer = new Dog();
@@ -96,7 +94,7 @@ public class AnimalService implements IAnimalService {
             createHero(computer);
             computer.setLevel(animal.getLevel());
             if (animal.getLevel() > 1) {
-                setStatsNextLevel.setStatsNextLevel(computer);
+                SetStatsNextLevel.setStatsNextLevel(computer);
             }
         }
         return computer;
@@ -141,7 +139,7 @@ public class AnimalService implements IAnimalService {
         return string;
     }
 
-    private int getIntReader() {
+    static int getIntReader() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int number = 0;
         boolean isReader = true;
@@ -156,8 +154,8 @@ public class AnimalService implements IAnimalService {
         return number;
     }
 
-    @Override
-    public void saveToFile(Animal animal) {
+
+    public static void saveToFile(Animal animal) {
         StringBuilder stats = new StringBuilder()
                 .append("id0: ").append(animal.getType())
                 .append("\nid1: ").append(animal.getName())
@@ -235,8 +233,8 @@ public class AnimalService implements IAnimalService {
         return animal;
     }
 
-    @Override
-    public String exists(String fileName) {
+
+    private String exists(String fileName) {
         String fullName = "src\\FightingAnimals\\save\\" + fileName + ".txt";
         File file = new File(fullName);
         if (!file.exists()) {
@@ -247,36 +245,12 @@ public class AnimalService implements IAnimalService {
         return fileName;
     }
 
-
-    @Override
-    public void flipACoin(Animal user, Animal computer) {
-        IBattle iBattle = new Battle();
-        int userThrows = 0;
-        int computerThrows = 0;
-        while (userThrows == computerThrows) {
-            userThrows = (int) (Math.random() * 100 + 1);
-            computerThrows = (int) (Math.random() * 100 + 1);
-        }
-        if (userThrows > computerThrows) {
-            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
-                    computerThrows + "\n" + user.getName() + " attacks first!\n");
-            iBattle.battle(user, computer);
-        } else {
-
-            System.out.println(user.getName() + " rolls (1-100): " + userThrows + "\n" + computer.getName() + " rolls (1-100): " +
-                    computerThrows + "\n" + computer.getName() + " attacks first!\n");
-            iBattle.battle(computer, user);
-        }
-    }
-
-    @Override
-    public void levelUp(Animal animal) {
-        SetStatsNextLevel setStatsNextLevel = new SetStatsNextLevel();
+    public static void levelUp(Animal animal) {
         int level = (int) animal.getLevel();
         int levelUp = 100 * (level * (1 + level));
         if (animal.getExperience() >= levelUp) {
             animal.setLevel(animal.getLevel() + 1);
-            setStatsNextLevel.setStatsNextLevel(animal);
+            SetStatsNextLevel.setStatsNextLevel(animal);
         }
     }
 

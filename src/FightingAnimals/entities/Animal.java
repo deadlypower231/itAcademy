@@ -1,8 +1,11 @@
 package FightingAnimals.entities;
 
 
-public abstract class Animal {
+import java.io.Serializable;
 
+public abstract class Animal implements Serializable {
+
+    public static final String SPACE = " ";
     protected String name;
 
     protected double level;
@@ -135,18 +138,18 @@ public abstract class Animal {
 
     @Override
     public String toString() {
-        return  "name=" + name + "\n" +
-                "level=" + level + "\n" +
-                "experience=" + experience + "\n" +
-                "health=" + health + "\n" +
-                "mana=" + mana + "\n" +
-                "damage=" + damage + "\n" +
-                "defence=" + defence + "\n" +
-                "strength=" + strength + "\n" +
-                "agility=" + agility + "\n" +
-                "intelligence=" + intelligence + "\n" +
-                "criticalStrikeMultiplier=" + criticalStrikeMultiplier + "\n" +
-                "criticalChance=" + criticalChance + "\n" +
-                "type=" + type + "\n";
+        return  "Name=" + name + SPACE +
+                "Level=" + (int)level + SPACE +
+                "Experience=" + (int)experience + SPACE +
+                "Health=" + (int)health + SPACE +
+                "Mana=" + (int)mana + SPACE +
+                "Damage=" + (int)damage + SPACE +
+                "Defence=" + (int)defence + SPACE +
+                "Strength=" + (int)strength + SPACE +
+                "Agility=" + (int)agility + SPACE +
+                "Intelligence=" + (int)intelligence + SPACE +
+                "CriticalStrikeMultiplier=" + (int)criticalStrikeMultiplier + SPACE +
+                "CriticalChance=" + (int)criticalChance + SPACE +
+                "Type=" + type + SPACE;
     }
 }

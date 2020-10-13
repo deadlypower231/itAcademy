@@ -12,14 +12,6 @@ public interface IAnimalService {
 
     Animal loadFromFile(String name);
 
-    void saveToFile(Animal animal);
-
-    String exists(String fileName);
-
-    void flipACoin(Animal user, Animal computer);
-
-    void levelUp(Animal animal);
-
     StringBuilder start();
 
     boolean exit();
