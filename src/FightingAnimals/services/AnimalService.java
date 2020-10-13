@@ -233,7 +233,6 @@ public class AnimalService implements IAnimalService {
         return animal;
     }
 
-
     private String exists(String fileName) {
         String fullName = "src\\FightingAnimals\\save\\" + fileName + ".txt";
         File file = new File(fullName);
